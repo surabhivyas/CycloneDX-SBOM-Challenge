@@ -1,0 +1,29 @@
+name: CycloneDX SBOM
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run Trivy to generate SBOM
+        uses: aquasecurity/trivy-action@0.12.0
+        with:
+          scan-type: fs
+          format: cyclonedx
+          output: sbom.json
+          ignore-unfixed: true
+          severity: HIGH,CRITICAL
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: cyclonedx-sbom
+          path: sbom.json
+
