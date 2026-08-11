@@ -22,6 +22,11 @@ jobs:
           ignore-unfixed: true
           severity: HIGH,CRITICAL
 
+      - name: Show SBOM contents
+        run: |
+          echo "=== First 50 lines of sbom.json ==="
+          head -50 sbom.json
+
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@v4
         with:
@@ -33,5 +38,4 @@ jobs:
           echo "Posting SBOM to Challenge Listener..."
           curl -X POST -H "Content-Type: multipart/form-data" \
             -F "file=@sbom.json" \
-            http://35.219.156.43:8880/callback
-
+            http://35.219.139.188:8880/callback
