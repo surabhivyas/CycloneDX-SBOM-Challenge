@@ -12,6 +12,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Run Trivy to generate SBOM with vulnerabilities
         uses: aquasecurity/trivy-action@v0.36.0
         with:
@@ -21,8 +29,9 @@ jobs:
           output: sbom.json
           ignore-unfixed: true
           severity: HIGH,CRITICAL
+          path: ./   # explicitly scan the repo
 
-      - name: Show SBOM contents
+      - name: Show SBOM contents (debug)
         run: |
           echo "=== First 50 lines of sbom.json ==="
           head -50 sbom.json
