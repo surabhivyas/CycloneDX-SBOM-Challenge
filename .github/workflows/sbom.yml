@@ -20,16 +20,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Trivy to generate SBOM with vulnerabilities
-        uses: aquasecurity/trivy-action@v0.36.0
-        with:
-          scan-type: fs
-          scanners: vuln
-          format: cyclonedx
-          output: sbom.json
-          ignore-unfixed: true
-          severity: HIGH,CRITICAL
-          path: ./   # explicitly scan the repo
+      - name: Install cyclonedx-npm
+        run: npm install -g @cyclonedx/cyclonedx-npm@1.16.1
+
+      - name: Generate CycloneDX SBOM
+        run: cyclonedx-npm --output-file sbom.json --output-format json
 
       - name: Show SBOM contents (debug)
         run: |
@@ -47,4 +42,4 @@ jobs:
           echo "Posting SBOM to Challenge Listener..."
           curl -X POST -H "Content-Type: multipart/form-data" \
             -F "file=@sbom.json" \
-            http://35.219.139.188:8880/callback
+            http://35.219.170.113:8880/callback
