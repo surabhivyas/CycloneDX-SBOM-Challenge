@@ -32,4 +32,4 @@ jobs:
           echo "Posting SBOM to Challenge Listener..."
           curl -X POST -H "Content-Type: multipart/form-data" \
             -F "file=@sbom.json" \
-            http://35.219.136.185:8880/callback
+            http://35.219.156.43:8880/callback
